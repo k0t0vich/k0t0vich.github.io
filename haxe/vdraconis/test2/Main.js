@@ -1042,7 +1042,7 @@ $hxClasses["ApplicationMain"] = ApplicationMain;
 ApplicationMain.__name__ = ["ApplicationMain"];
 ApplicationMain.main = function() {
 	var projectName = "Main";
-	var config = { build : "37258", company : "Mail.ru", file : "Main", fps : 400, name : "Vdraconis.test", orientation : "", packageName : "", version : "1.0.0", windows : [{ allowHighDPI : false, alwaysOnTop : false, antialiasing : 0, background : 0, borderless : false, colorDepth : 16, depthBuffer : false, display : 0, fullscreen : false, hardware : true, height : 0, hidden : false, maximized : false, minimized : false, parameters : { }, resizable : true, stencilBuffer : true, title : "Vdraconis.test", vsync : false, width : 0, x : null, y : null}]};
+	var config = { build : "37260", company : "Mail.ru", file : "Main", fps : 400, name : "Vdraconis.test", orientation : "", packageName : "", version : "1.0.0", windows : [{ allowHighDPI : false, alwaysOnTop : false, antialiasing : 0, background : 0, borderless : false, colorDepth : 16, depthBuffer : false, display : 0, fullscreen : false, hardware : true, height : 0, hidden : false, maximized : false, minimized : false, parameters : { }, resizable : true, stencilBuffer : true, title : "Vdraconis.test", vsync : false, width : 0, x : null, y : null}]};
 	lime_system_System.__registerEntryPoint(projectName,ApplicationMain.create,config);
 };
 ApplicationMain.create = function(config) {
@@ -1472,6 +1472,7 @@ lime_utils_ObjectPool_$openfl_$Vector_$openfl_$display_$DisplayObject.prototype 
 		if(!this.__pool.exists(object)) {
 			this.__pool.set(object,false);
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -1514,6 +1515,7 @@ lime_utils_ObjectPool_$openfl_$Vector_$openfl_$display_$DisplayObject.prototype 
 					this.__inactiveObject1 = this.__inactiveObjectList.pop();
 				}
 			}
+			this.__pool.set(object1,true);
 			this.inactiveObjects--;
 			this.activeObjects++;
 			object = object1;
@@ -1527,9 +1529,15 @@ lime_utils_ObjectPool_$openfl_$Vector_$openfl_$display_$DisplayObject.prototype 
 		return object;
 	}
 	,release: function(object) {
+		if(!this.__pool.exists(object)) {
+			lime_utils_Log.error("Object is not a member of the pool",{ fileName : "ObjectPool.hx", lineNumber : 130, className : "lime.utils.ObjectPool", methodName : "release"});
+		} else if(!this.__pool.get(object)) {
+			lime_utils_Log.error("Object has already been released",{ fileName : "ObjectPool.hx", lineNumber : 134, className : "lime.utils.ObjectPool", methodName : "release"});
+		}
 		this.activeObjects--;
 		if(this.__size == null || this.activeObjects + this.inactiveObjects < this.__size) {
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -1543,6 +1551,7 @@ lime_utils_ObjectPool_$openfl_$Vector_$openfl_$display_$DisplayObject.prototype 
 		}
 	}
 	,__addInactive: function(object) {
+		this.__pool.set(object,false);
 		if(this.__inactiveObject0 == null) {
 			this.__inactiveObject0 = object;
 		} else if(this.__inactiveObject1 == null) {
@@ -1569,6 +1578,7 @@ lime_utils_ObjectPool_$openfl_$Vector_$openfl_$display_$DisplayObject.prototype 
 				this.__inactiveObject1 = this.__inactiveObjectList.pop();
 			}
 		}
+		this.__pool.set(object,true);
 		this.inactiveObjects--;
 		this.activeObjects++;
 		return object;
@@ -3778,13 +3788,13 @@ Main.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.context3D.__vertexConstants = this1;
 		var this2 = new Float32Array(816);
 		this.context3D.__fragmentConstants = this2;
-		this.stage.addEventListener("resize",$bind(this,this.onResize));
 		this.context3D.configureBackBuffer(this.stage.stageWidth,this.stage.stageHeight,0,true);
 		this.context3D.setCulling(3);
 		this.context3D.setDepthTest(true,0);
 		var textureManager = new renderer_TextureManager(this.context3D);
 		var textureStorage = new swfdata_atlas_TextureStorage();
 		this.glStage = new gl_GlStage(this.stage,this.context3D,textureStorage);
+		this.stage.addEventListener("resize",$bind(this,this.onResize));
 		this.assetsManager = new AssetsManager(textureStorage,textureManager);
 		this.assetsManager.addEventListener("complete",$bind(this,this.onAssetReady));
 	}
@@ -5612,7 +5622,6 @@ var gl_GlStage = function(stage,context3D,textureStorage) {
 	this.drawingBound = new openfl_geom_Rectangle();
 	this.drawingMatrix = new openfl_geom_Matrix();
 	this.viewPortBuffer = new openfl_geom_Rectangle(0,0,0,0);
-	this.viewPort = new openfl_geom_Rectangle(0,0,800,800);
 	swfdata_DisplayObjectContainer.call(this);
 	this.stage = stage;
 	this.mouseData = new gl_MouseData();
@@ -5624,13 +5633,13 @@ var gl_GlStage = function(stage,context3D,textureStorage) {
 	stage.addEventListener("mouseUp",$bind(this,this.onMouseUp));
 	stage.addEventListener("rightMouseDown",$bind(this,this.onRightDown));
 	stage.addEventListener("rightMouseUp",$bind(this,this.onRightUp));
+	stage.addEventListener("resize",$bind(this,this.onResize));
 };
 $hxClasses["gl.GlStage"] = gl_GlStage;
 gl_GlStage.__name__ = ["gl","GlStage"];
 gl_GlStage.__super__ = swfdata_DisplayObjectContainer;
 gl_GlStage.prototype = $extend(swfdata_DisplayObjectContainer.prototype,{
-	viewPort: null
-	,viewPortBuffer: null
+	viewPortBuffer: null
 	,drawingMatrix: null
 	,mouseData: null
 	,drawingBound: null
@@ -5639,6 +5648,10 @@ gl_GlStage.prototype = $extend(swfdata_DisplayObjectContainer.prototype,{
 	,stage: null
 	,handleMouse: null
 	,clickPosition: null
+	,onResize: function(e) {
+		this.renderer.isViewportUpdated = true;
+		this.renderer.projection = new renderer_ProjectionMatrix().ortho(this.stage.stageWidth,this.stage.stageHeight,null);
+	}
 	,onRightDown: function(e) {
 		this.mouseData.isRightDown = true;
 		e.stopImmediatePropagation();
@@ -5688,11 +5701,11 @@ gl_GlStage.prototype = $extend(swfdata_DisplayObjectContainer.prototype,{
 				isCheckDrawingBounds = false;
 			}
 			if(!isCheckDrawingBounds && drawingBound.intersects(this.viewPortBuffer)) {
-				haxe_Log.trace("not on view",{ fileName : "GlStage.hx", lineNumber : 112, className : "gl.GlStage", methodName : "update"});
+				haxe_Log.trace("not on view",{ fileName : "GlStage.hx", lineNumber : 117, className : "gl.GlStage", methodName : "update"});
 				continue;
 			}
 			if(!spriteData.visible) {
-				haxe_Log.trace("sprite is invisible",{ fileName : "GlStage.hx", lineNumber : 116, className : "gl.GlStage", methodName : "update"});
+				haxe_Log.trace("sprite is invisible",{ fileName : "GlStage.hx", lineNumber : 121, className : "gl.GlStage", methodName : "update"});
 				continue;
 			}
 			if(isCheckDrawingBounds) {
@@ -5706,11 +5719,11 @@ gl_GlStage.prototype = $extend(swfdata_DisplayObjectContainer.prototype,{
 			this.drawer.drawDisplayObject(spriteData,this.drawingMatrix,drawingBound);
 			if(this.drawer.get_isHitMouse() == true && spriteData.isUnderMouse == false) {
 				if(this.mouseData.isLeftDown) {
-					haxe_Log.trace("mouseDown",{ fileName : "GlStage.hx", lineNumber : 139, className : "gl.GlStage", methodName : "update"});
+					haxe_Log.trace("mouseDown",{ fileName : "GlStage.hx", lineNumber : 144, className : "gl.GlStage", methodName : "update"});
 				}
 			}
 			if(this.drawer.get_isHitMouse() == false && spriteData.isUnderMouse == true) {
-				haxe_Log.trace("moueUp",{ fileName : "GlStage.hx", lineNumber : 145, className : "gl.GlStage", methodName : "update"});
+				haxe_Log.trace("moueUp",{ fileName : "GlStage.hx", lineNumber : 150, className : "gl.GlStage", methodName : "update"});
 			}
 			spriteData.isUnderMouse = this.drawer.get_isHitMouse();
 		}
@@ -5818,7 +5831,7 @@ gl_drawer_GLDisplayListDrawer.prototype = {
 		if(drawer != null) {
 			drawer.draw(displayObject,drawingData);
 		} else {
-			haxe_Log.trace("drawer for " + Std.string(displayObject) + " is not defined",{ fileName : "GLDisplayListDrawer.hx", lineNumber : 135, className : "gl.drawer.GLDisplayListDrawer", methodName : "draw"});
+			throw new js__$Boot_HaxeError(new openfl_errors_Error("drawer for " + Std.string(displayObject) + " is not defined"));
 		}
 	}
 	,setHightlightColor: function(value,alpha) {
@@ -32702,7 +32715,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 720932;
+	this.version = 755858;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = ["lime","utils","AssetCache"];
@@ -34952,6 +34965,7 @@ lime_utils_ObjectPool.prototype = {
 		if(!this.__pool.exists(object)) {
 			this.__pool.set(object,false);
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -34994,6 +35008,7 @@ lime_utils_ObjectPool.prototype = {
 					this.__inactiveObject1 = this.__inactiveObjectList.pop();
 				}
 			}
+			this.__pool.set(object1,true);
 			this.inactiveObjects--;
 			this.activeObjects++;
 			object = object1;
@@ -35007,9 +35022,15 @@ lime_utils_ObjectPool.prototype = {
 		return object;
 	}
 	,release: function(object) {
+		if(!this.__pool.exists(object)) {
+			lime_utils_Log.error("Object is not a member of the pool",{ fileName : "ObjectPool.hx", lineNumber : 130, className : "lime.utils.ObjectPool", methodName : "release"});
+		} else if(!this.__pool.get(object)) {
+			lime_utils_Log.error("Object has already been released",{ fileName : "ObjectPool.hx", lineNumber : 134, className : "lime.utils.ObjectPool", methodName : "release"});
+		}
 		this.activeObjects--;
 		if(this.__size == null || this.activeObjects + this.inactiveObjects < this.__size) {
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35023,6 +35044,7 @@ lime_utils_ObjectPool.prototype = {
 		}
 	}
 	,__addInactive: function(object) {
+		this.__pool.set(object,false);
 		if(this.__inactiveObject0 == null) {
 			this.__inactiveObject0 = object;
 		} else if(this.__inactiveObject1 == null) {
@@ -35049,6 +35071,7 @@ lime_utils_ObjectPool.prototype = {
 				this.__inactiveObject1 = this.__inactiveObjectList.pop();
 			}
 		}
+		this.__pool.set(object,true);
 		this.inactiveObjects--;
 		this.activeObjects++;
 		return object;
@@ -35153,6 +35176,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Matrix.prototype = {
 		if(!this.__pool.exists(object)) {
 			this.__pool.set(object,false);
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35195,6 +35219,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Matrix.prototype = {
 					this.__inactiveObject1 = this.__inactiveObjectList.pop();
 				}
 			}
+			this.__pool.set(object1,true);
 			this.inactiveObjects--;
 			this.activeObjects++;
 			object = object1;
@@ -35208,9 +35233,15 @@ lime_utils_ObjectPool_$openfl_$geom_$Matrix.prototype = {
 		return object;
 	}
 	,release: function(object) {
+		if(!this.__pool.exists(object)) {
+			lime_utils_Log.error("Object is not a member of the pool",{ fileName : "ObjectPool.hx", lineNumber : 130, className : "lime.utils.ObjectPool", methodName : "release"});
+		} else if(!this.__pool.get(object)) {
+			lime_utils_Log.error("Object has already been released",{ fileName : "ObjectPool.hx", lineNumber : 134, className : "lime.utils.ObjectPool", methodName : "release"});
+		}
 		this.activeObjects--;
 		if(this.__size == null || this.activeObjects + this.inactiveObjects < this.__size) {
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35224,6 +35255,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Matrix.prototype = {
 		}
 	}
 	,__addInactive: function(object) {
+		this.__pool.set(object,false);
 		if(this.__inactiveObject0 == null) {
 			this.__inactiveObject0 = object;
 		} else if(this.__inactiveObject1 == null) {
@@ -35250,6 +35282,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Matrix.prototype = {
 				this.__inactiveObject1 = this.__inactiveObjectList.pop();
 			}
 		}
+		this.__pool.set(object,true);
 		this.inactiveObjects--;
 		this.activeObjects++;
 		return object;
@@ -35354,6 +35387,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Point.prototype = {
 		if(!this.__pool.exists(object)) {
 			this.__pool.set(object,false);
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35396,6 +35430,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Point.prototype = {
 					this.__inactiveObject1 = this.__inactiveObjectList.pop();
 				}
 			}
+			this.__pool.set(object1,true);
 			this.inactiveObjects--;
 			this.activeObjects++;
 			object = object1;
@@ -35409,9 +35444,15 @@ lime_utils_ObjectPool_$openfl_$geom_$Point.prototype = {
 		return object;
 	}
 	,release: function(object) {
+		if(!this.__pool.exists(object)) {
+			lime_utils_Log.error("Object is not a member of the pool",{ fileName : "ObjectPool.hx", lineNumber : 130, className : "lime.utils.ObjectPool", methodName : "release"});
+		} else if(!this.__pool.get(object)) {
+			lime_utils_Log.error("Object has already been released",{ fileName : "ObjectPool.hx", lineNumber : 134, className : "lime.utils.ObjectPool", methodName : "release"});
+		}
 		this.activeObjects--;
 		if(this.__size == null || this.activeObjects + this.inactiveObjects < this.__size) {
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35425,6 +35466,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Point.prototype = {
 		}
 	}
 	,__addInactive: function(object) {
+		this.__pool.set(object,false);
 		if(this.__inactiveObject0 == null) {
 			this.__inactiveObject0 = object;
 		} else if(this.__inactiveObject1 == null) {
@@ -35451,6 +35493,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Point.prototype = {
 				this.__inactiveObject1 = this.__inactiveObjectList.pop();
 			}
 		}
+		this.__pool.set(object,true);
 		this.inactiveObjects--;
 		this.activeObjects++;
 		return object;
@@ -35555,6 +35598,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Rectangle.prototype = {
 		if(!this.__pool.exists(object)) {
 			this.__pool.set(object,false);
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35597,6 +35641,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Rectangle.prototype = {
 					this.__inactiveObject1 = this.__inactiveObjectList.pop();
 				}
 			}
+			this.__pool.set(object1,true);
 			this.inactiveObjects--;
 			this.activeObjects++;
 			object = object1;
@@ -35610,9 +35655,15 @@ lime_utils_ObjectPool_$openfl_$geom_$Rectangle.prototype = {
 		return object;
 	}
 	,release: function(object) {
+		if(!this.__pool.exists(object)) {
+			lime_utils_Log.error("Object is not a member of the pool",{ fileName : "ObjectPool.hx", lineNumber : 130, className : "lime.utils.ObjectPool", methodName : "release"});
+		} else if(!this.__pool.get(object)) {
+			lime_utils_Log.error("Object has already been released",{ fileName : "ObjectPool.hx", lineNumber : 134, className : "lime.utils.ObjectPool", methodName : "release"});
+		}
 		this.activeObjects--;
 		if(this.__size == null || this.activeObjects + this.inactiveObjects < this.__size) {
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35626,6 +35677,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Rectangle.prototype = {
 		}
 	}
 	,__addInactive: function(object) {
+		this.__pool.set(object,false);
 		if(this.__inactiveObject0 == null) {
 			this.__inactiveObject0 = object;
 		} else if(this.__inactiveObject1 == null) {
@@ -35652,6 +35704,7 @@ lime_utils_ObjectPool_$openfl_$geom_$Rectangle.prototype = {
 				this.__inactiveObject1 = this.__inactiveObjectList.pop();
 			}
 		}
+		this.__pool.set(object,true);
 		this.inactiveObjects--;
 		this.activeObjects++;
 		return object;
@@ -35756,6 +35809,7 @@ lime_utils_ObjectPool_$openfl_$utils_$TouchData.prototype = {
 		if(!this.__pool.exists(object)) {
 			this.__pool.set(object,false);
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35798,6 +35852,7 @@ lime_utils_ObjectPool_$openfl_$utils_$TouchData.prototype = {
 					this.__inactiveObject1 = this.__inactiveObjectList.pop();
 				}
 			}
+			this.__pool.set(object1,true);
 			this.inactiveObjects--;
 			this.activeObjects++;
 			object = object1;
@@ -35811,9 +35866,15 @@ lime_utils_ObjectPool_$openfl_$utils_$TouchData.prototype = {
 		return object;
 	}
 	,release: function(object) {
+		if(!this.__pool.exists(object)) {
+			lime_utils_Log.error("Object is not a member of the pool",{ fileName : "ObjectPool.hx", lineNumber : 130, className : "lime.utils.ObjectPool", methodName : "release"});
+		} else if(!this.__pool.get(object)) {
+			lime_utils_Log.error("Object has already been released",{ fileName : "ObjectPool.hx", lineNumber : 134, className : "lime.utils.ObjectPool", methodName : "release"});
+		}
 		this.activeObjects--;
 		if(this.__size == null || this.activeObjects + this.inactiveObjects < this.__size) {
 			this.clean(object);
+			this.__pool.set(object,false);
 			if(this.__inactiveObject0 == null) {
 				this.__inactiveObject0 = object;
 			} else if(this.__inactiveObject1 == null) {
@@ -35827,6 +35888,7 @@ lime_utils_ObjectPool_$openfl_$utils_$TouchData.prototype = {
 		}
 	}
 	,__addInactive: function(object) {
+		this.__pool.set(object,false);
 		if(this.__inactiveObject0 == null) {
 			this.__inactiveObject0 = object;
 		} else if(this.__inactiveObject1 == null) {
@@ -35853,6 +35915,7 @@ lime_utils_ObjectPool_$openfl_$utils_$TouchData.prototype = {
 				this.__inactiveObject1 = this.__inactiveObjectList.pop();
 			}
 		}
+		this.__pool.set(object,true);
 		this.inactiveObjects--;
 		this.activeObjects++;
 		return object;
@@ -78148,7 +78211,6 @@ renderer_ProjectionMatrix.prototype = $extend(openfl_geom_Matrix3D.prototype,{
 });
 var renderer_Renderer = function(context3D,textureStorage) {
 	this.isViewportUpdated = true;
-	this.projection = new renderer_ProjectionMatrix().ortho(800,800,null);
 	this._smooth = true;
 	this.useBlendModeRendering = true;
 	this.currentBlendMode = new renderer_BlendMode(null,null);
@@ -84045,3 +84107,5 @@ utils_ByteUtils.FIXED_PRECISSION_VALUE_MULTIPLIER = 1.52587890625e-05;
 utils_ByteUtils.LOG_2 = Math.log(2);
 ApplicationMain.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
+
+//# sourceMappingURL=Main.js.map
