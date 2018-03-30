@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<meta charset="utf-8">
+	
+	<title>Vdraconis.test</title>
+	
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	
+	
+	<link rel="shortcut icon" type="image/png" href="./favicon.png">
+	
+	
+	<script type="text/javascript" src="./lib/howler.min.js"></script>
+	<script type="text/javascript" src="./lib/pako.min.js"></script>
+	<script type="text/javascript" src="./lib/FileSaver.min.js"></script>
+	<script type="text/javascript" src="./Main.js"></script>
+	
+	<script>
+		window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, false);
+		if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
+			var meta = document.getElementById ("viewport");
+			meta.setAttribute ('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
+		}
+	</script>
+	
+	<style>
+		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+		#openfl-content { background: #000000; width: 100%; height: 100%; }
+		
+		@font-face {
+			font-family: 'Open Sans Semibold';
+			src: url('fonts/OpenSans-Semibold.eot');
+			src: url('fonts/OpenSans-Semibold.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-Semibold.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-Semibold.woff') format('woff'),
+			url('fonts/OpenSans-Semibold.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Cond Light Italic';
+			src: url('fonts/OpenSans-CondLightItalic.eot');
+			src: url('fonts/OpenSans-CondLightItalic.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-CondLightItalic.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-CondLightItalic.woff') format('woff'),
+			url('fonts/OpenSans-CondLightItalic.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Cond Light';
+			src: url('fonts/OpenSans-CondLight.eot');
+			src: url('fonts/OpenSans-CondLight.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-CondLight.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-CondLight.woff') format('woff'),
+			url('fonts/OpenSans-CondLight.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Light';
+			src: url('fonts/OpenSans-Light.eot');
+			src: url('fonts/OpenSans-Light.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-Light.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-Light.woff') format('woff'),
+			url('fonts/OpenSans-Light.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Italic';
+			src: url('fonts/OpenSans-Italic.eot');
+			src: url('fonts/OpenSans-Italic.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-Italic.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-Italic.woff') format('woff'),
+			url('fonts/OpenSans-Italic.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Extrabold';
+			src: url('fonts/OpenSans-ExtraBold.eot');
+			src: url('fonts/OpenSans-ExtraBold.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-ExtraBold.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-ExtraBold.woff') format('woff'),
+			url('fonts/OpenSans-ExtraBold.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Light Italic';
+			src: url('fonts/OpenSans-LightItalic.eot');
+			src: url('fonts/OpenSans-LightItalic.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-LightItalic.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-LightItalic.woff') format('woff'),
+			url('fonts/OpenSans-LightItalic.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Bold';
+			src: url('fonts/OpenSans-Bold.eot');
+			src: url('fonts/OpenSans-Bold.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-Bold.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-Bold.woff') format('woff'),
+			url('fonts/OpenSans-Bold.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Semibold Italic';
+			src: url('fonts/OpenSans-SemiboldItalic.eot');
+			src: url('fonts/OpenSans-SemiboldItalic.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-SemiboldItalic.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-SemiboldItalic.woff') format('woff'),
+			url('fonts/OpenSans-SemiboldItalic.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Extrabold Italic';
+			src: url('fonts/OpenSans-ExtraBoldItalic.eot');
+			src: url('fonts/OpenSans-ExtraBoldItalic.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-ExtraBoldItalic.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-ExtraBoldItalic.woff') format('woff'),
+			url('fonts/OpenSans-ExtraBoldItalic.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans';
+			src: url('fonts/OpenSans-Regular.eot');
+			src: url('fonts/OpenSans-Regular.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-Regular.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-Regular.woff') format('woff'),
+			url('fonts/OpenSans-Regular.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Bold Italic';
+			src: url('fonts/OpenSans-BoldItalic.eot');
+			src: url('fonts/OpenSans-BoldItalic.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-BoldItalic.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-BoldItalic.woff') format('woff'),
+			url('fonts/OpenSans-BoldItalic.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		@font-face {
+			font-family: 'Open Sans Condensed Bold';
+			src: url('fonts/OpenSans-CondBold.eot');
+			src: url('fonts/OpenSans-CondBold.eot?#iefix') format('embedded-opentype'),
+			url('fonts/OpenSans-CondBold.svg#my-font-family') format('svg'),
+			url('fonts/OpenSans-CondBold.woff') format('woff'),
+			url('fonts/OpenSans-CondBold.ttf') format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+	</style>
+	
+</head>
+<body>
+	
+	<noscript>This webpage makes extensive use of JavaScript. Please enable JavaScript in your web browser to view this page.</noscript>
+	
+	<div id="openfl-content"></div>
+	
+	<script type="text/javascript">
+		lime.embed ("Main", "openfl-content", 0, 0, { parameters: {} });
+	</script>
+	
+</body>
+</html>
