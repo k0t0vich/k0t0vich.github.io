@@ -1048,7 +1048,7 @@ $hxClasses["ApplicationMain"] = ApplicationMain;
 ApplicationMain.__name__ = ["ApplicationMain"];
 ApplicationMain.main = function() {
 	var projectName = "Main";
-	var config = { build : "31", company : "Mail.ru", file : "Main", fps : 400, name : "Vdraconis.test", orientation : "", packageName : "", version : "1.0.0", windows : [{ allowHighDPI : false, alwaysOnTop : false, antialiasing : 0, background : 0, borderless : false, colorDepth : 16, depthBuffer : false, display : 0, fullscreen : false, hardware : true, height : 0, hidden : false, maximized : false, minimized : false, parameters : { }, resizable : true, stencilBuffer : true, title : "Vdraconis.test", vsync : false, width : 0, x : null, y : null}]};
+	var config = { build : "32", company : "Mail.ru", file : "Main", fps : 400, name : "Vdraconis.test", orientation : "", packageName : "", version : "1.0.0", windows : [{ allowHighDPI : false, alwaysOnTop : false, antialiasing : 0, background : 0, borderless : false, colorDepth : 16, depthBuffer : false, display : 0, fullscreen : false, hardware : true, height : 0, hidden : false, maximized : false, minimized : false, parameters : { }, resizable : true, stencilBuffer : true, title : "Vdraconis.test", vsync : false, width : 0, x : null, y : null}]};
 	lime_system_System.__registerEntryPoint(projectName,ApplicationMain.create,config);
 };
 ApplicationMain.create = function(config) {
@@ -4729,7 +4729,7 @@ ManifestResources.init = function(config) {
 	var data;
 	var manifest;
 	var library;
-	data = "{\"name\":null,\"assets\":\"aoy4:pathy25:animation%2Fteslagirl.aniy4:sizei195167y4:typey4:TEXTy2:idR1y7:preloadtgoR0y17:animation%2Fx.aniR2i67366R3R4R5R7R6tgoR0y21:animation%2Fbiker.aniR2i280712R3R4R5R8R6tgoR0y17:animation%2Fa.aniR2i139104R3R4R5R9R6tgoR0y14:bg%2Fmay_9.jpgR2i209437R3y5:IMAGER5R10R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
+	data = "{\"name\":null,\"assets\":\"ah\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[],\"libraryType\":null}";
 	manifest = lime_utils_AssetManifest.parse(data,rootPath);
 	library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("default",library);
@@ -33012,7 +33012,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 385825;
+	this.version = 554594;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = ["lime","utils","AssetCache"];
