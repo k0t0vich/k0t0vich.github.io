@@ -1,19 +1,231 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Metro 4 -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
     <title>Exam-melow-react-prerender-scss</title>
-</head>
+<style>html, body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  height: 100%; }
+
+.title-header, .task-header {
+  text-align: center;
+  border-color: blue;
+  border: solid 1px;
+  border-top-color: rgba(0, 0, 139, 0);
+  margin: 0 20% 0 20%;
+  background-color: #94c6ee;
+  border-radius: 0 0 10px 10px; }
+
+.task-header {
+  margin: 0 30% 0 30%;
+  box-shadow: 2px 5px 5px #94c6ee; }
+
+#maket {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%; }
+
+#left {
+  position: absolute;
+  width: 50px;
+  float: left;
+  height: 60%;
+  top: 20%;
+  left: 20px; }
+
+#canvas {
+  flex: 1 0 auto;
+  padding-left: 50px; }
+
+#footer {
+  margin: 0 15% 0 15%;
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 70%; }
+
+.values {
+  color: blue; }
+
+h1 {
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-size: 16pt;
+  color: darkblue;
+  text-align: center; }
+
+h2 {
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-size: 12pt;
+  color: darkblue;
+  text-align: left;
+  padding-left: 20px; }
+</style><style data-jss="" data-meta="PrivateValueLabel">
+.jss15.jss16 .jss17 {
+  transform: scale(1) translateY(-10px);
+}
+.jss17 {
+  top: -34px;
+  left: calc(-50% + -4px);
+  z-index: 1;
+  position: absolute;
+  font-size: 0.75rem;
+  transform: scale(0);
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.01071em;
+  transform-origin: bottom center;
+}
+.jss18 {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  transform: rotate(-45deg);
+  align-items: center;
+  border-radius: 50% 50% 50% 0;
+  justify-content: center;
+  background-color: currentColor;
+}
+.jss19 {
+  color: #fff;
+  transform: rotate(45deg);
+}
+</style><style data-jss="" data-meta="MuiSlider">
+.MuiSlider-root {
+  color: #3f51b5;
+  width: 100%;
+  cursor: pointer;
+  height: 2px;
+  display: inline-block;
+  padding: 11px 0;
+  position: relative;
+  box-sizing: content-box;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.MuiSlider-root.Mui-disabled {
+  color: #bdbdbd;
+  cursor: default;
+}
+.MuiSlider-root.MuiSlider-vertical {
+  width: 2px;
+  height: 100%;
+  padding: 0 11px;
+}
+.MuiSlider-marked {
+  margin-bottom: 20px;
+}
+.MuiSlider-marked.MuiSlider-vertical {
+  margin-right: 20px;
+  margin-bottom: auto;
+}
+.MuiSlider-rail {
+  width: 100%;
+  height: 2px;
+  display: block;
+  opacity: 0.38;
+  position: absolute;
+  border-radius: 1px;
+  background-color: currentColor;
+}
+.MuiSlider-vertical .MuiSlider-rail {
+  width: 2px;
+  height: 100%;
+}
+.MuiSlider-track {
+  height: 2px;
+  display: block;
+  position: absolute;
+  border-radius: 1px;
+  background-color: currentColor;
+}
+.MuiSlider-vertical .MuiSlider-track {
+  width: 2px;
+}
+.MuiSlider-thumb {
+  width: 12px;
+  height: 12px;
+  display: flex;
+  outline: 0;
+  position: absolute;
+  box-sizing: border-box;
+  margin-top: -5px;
+  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  align-items: center;
+  margin-left: -6px;
+  border-radius: 50%;
+  justify-content: center;
+  background-color: currentColor;
+}
+.MuiSlider-thumb.Mui-focusVisible, .MuiSlider-thumb:hover {
+  box-shadow: 0px 0px 0px 8px rgba(63, 81, 181, 0.16);
+}
+.MuiSlider-thumb.MuiSlider-active {
+  box-shadow: 0px 0px 0px 14px rgba(63, 81, 181, 0.16);
+}
+.Mui-disabled .MuiSlider-thumb {
+  width: 8px;
+  height: 8px;
+  margin-top: -3px;
+  margin-left: -4px;
+  pointer-events: none;
+}
+.MuiSlider-vertical .MuiSlider-thumb {
+  margin-left: -5px;
+  margin-bottom: -6px;
+}
+.MuiSlider-vertical.Mui-disabled .MuiSlider-thumb {
+  margin-left: -3px;
+  margin-bottom: -4px;
+}
+.Mui-disabled .MuiSlider-thumb:hover {
+  box-shadow: none;
+}
+@media (hover: none) {
+  .MuiSlider-thumb.Mui-focusVisible, .MuiSlider-thumb:hover {
+    box-shadow: none;
+  }
+}
+.MuiSlider-mark {
+  width: 2px;
+  height: 2px;
+  position: absolute;
+  border-radius: 1px;
+  background-color: currentColor;
+}
+.MuiSlider-markActive {
+  background-color: rgb(208, 213, 237);
+}
+.MuiSlider-markLabel {
+  top: 22px;
+  color: rgba(0, 0, 0, 0.54);
+  position: absolute;
+  font-size: 0.875rem;
+  transform: translateX(-50%);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  white-space: nowrap;
+  letter-spacing: 0.01071em;
+}
+.MuiSlider-vertical .MuiSlider-markLabel {
+  top: auto;
+  left: 22px;
+  transform: translateY(50%);
+}
+.MuiSlider-markLabelActive {
+  color: rgba(0, 0, 0, 0.87);
+}
+</style></head>
 
 <body>
-    <div id="root">
+    <div id="root"><div id="maket"><div class="title-header"><h1>Задача про вес арбуза</h1></div><div class="task-header"><h2>Начальный вес: <span class="values">100 кг</span><br>Начальный процент воды: <span class="values">99%</span><br>Текущий процент воды: <span class="values">70%</span><br>Текущий вес арбуза: <span class="values">3.33 кг</span></h2></div><div id="left"><span class="MuiSlider-root MuiSlider-vertical" id="weightSlider"><span class="MuiSlider-rail"></span><span class="MuiSlider-track" style="bottom: 0%; height: 9.90991%;"></span><input type="hidden" value="100"><span class="MuiSlider-thumb jss16 jss15" tabindex="0" role="slider" data-index="0" aria-orientation="vertical" aria-valuemax="1000" aria-valuemin="1" aria-valuenow="100" style="bottom: 9.90991%;"><span class="jss17 MuiSlider-valueLabel"><span class="jss18"><span class="jss19">100</span></span></span></span></span></div><canvas id="canvas" width="750" height="439"></canvas></div><div id="footer"><span class="MuiSlider-root" id="waterSlider"><span class="MuiSlider-rail"></span><span class="MuiSlider-track" style="left: 0%; width: 70.4082%;"></span><input type="hidden" value="70"><span class="MuiSlider-thumb jss16 jss15" tabindex="0" role="slider" data-index="0" aria-orientation="horizontal" aria-valuemax="99" aria-valuemin="1" aria-valuenow="70" style="left: 70.4082%;"><span class="jss17 MuiSlider-valueLabel"><span class="jss18"><span class="jss19">70</span></span></span></span></span></div></div>
+<script type="text/javascript" src="./main.js"></script>
 
-    </div>
-<script type="text/javascript" src="./main.js"></script></body>
-
-</html>
+</body></html>
