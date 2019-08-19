@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "./static/css/main.70266770.chunk.css",
-    "main.js": "./static/js/main.9506c855.chunk.js",
-    "main.js.map": "./static/js/main.9506c855.chunk.js.map",
-    "runtime~main.js": "./static/js/runtime~main.f7265b1c.js",
-    "runtime~main.js.map": "./static/js/runtime~main.f7265b1c.js.map",
-    "static/js/2.27f61af4.chunk.js": "./static/js/2.27f61af4.chunk.js",
-    "static/js/2.27f61af4.chunk.js.map": "./static/js/2.27f61af4.chunk.js.map",
-    "index.html": "./index.html",
-    "precache-manifest.f8a31f8edff6ca28e6d825f3fee7db3d.js": "./precache-manifest.f8a31f8edff6ca28e6d825f3fee7db3d.js",
-    "service-worker.js": "./service-worker.js",
-    "static/css/main.70266770.chunk.css.map": "./static/css/main.70266770.chunk.css.map"
+    "main.css": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/css/main.70266770.chunk.css",
+    "main.js": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/js/main.9506c855.chunk.js",
+    "main.js.map": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/js/main.9506c855.chunk.js.map",
+    "runtime~main.js": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/js/runtime~main.27e44585.js",
+    "runtime~main.js.map": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/js/runtime~main.27e44585.js.map",
+    "static/js/2.bbac8a89.chunk.js": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/js/2.bbac8a89.chunk.js",
+    "static/js/2.bbac8a89.chunk.js.map": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/js/2.bbac8a89.chunk.js.map",
+    "index.html": "/react/exam-tooth-react-mobx-ts-sc-router-material/index.html",
+    "precache-manifest.62196f0832de88a5e57a4e87c0a3fa29.js": "/react/exam-tooth-react-mobx-ts-sc-router-material/precache-manifest.62196f0832de88a5e57a4e87c0a3fa29.js",
+    "service-worker.js": "/react/exam-tooth-react-mobx-ts-sc-router-material/service-worker.js",
+    "static/css/main.70266770.chunk.css.map": "/react/exam-tooth-react-mobx-ts-sc-router-material/static/css/main.70266770.chunk.css.map"
   }
 }
